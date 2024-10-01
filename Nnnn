@@ -1,0 +1,41 @@
+class RobotPacman:
+    def __init__(self, max_x, max_y, trash_positions):
+        self.position = (0, 0)  # Posisi awal robot
+        self.max_x = max_x      # Batas horizontal
+        self.max_y = max_y      # Batas vertikal
+        self.trash_positions = trash_positions  # Daftar posisi sampah
+
+    def move(self, direction):
+        x, y = self.position
+        if direction == "up" and y < self.max_y:
+            self.position = (x, y + 1)
+        elif direction == "down" and y > 0:
+            self.position = (x, y - 1)
+        elif direction == "left" and x > 0:
+            self.position = (x - 1, y)
+        elif direction == "right" and x < self.max_x:
+            self.position = (x + 1, y)
+        self.check_for_trash()  # Cek apakah ada sampah setelah bergerak
+
+    def check_for_trash(self):
+        if self.position in self.trash_positions:
+            self.clean()  # Panggil metode clean untuk membersihkan
+            self.trash_positions.remove(self.position)  # Hapus sampah setelah dibersihkan
+
+    def clean(self):
+        print(f"Cleaning trash at position {self.position}")
+
+# Inisialisasi Pacman dengan batas grid 5x5 dan beberapa posisi sampah
+trash_positions = [(1, 1), (2, 2), (3, 3)]  # Lokasi sampah
+robot = RobotPacman(max_x=5, max_y=5, trash_positions=trash_positions)
+
+# Contoh pergerakan robot
+robot.move("up")    # Bergerak ke (0, 1)
+robot.move("right") # Bergerak ke (1, 1), ada sampah di sini, akan dibersihkan
+robot.move("right") # Bergerak ke (2, 1)
+robot.move("up")    # Bergerak ke (2, 2), ada sampah di sini, akan dibersihkan
+robot.move("right") # Bergerak ke (3, 2)
+robot.move("up")    # Bergerak ke (3, 3), ada sampah di sini, akan dibersihkan
+
+# Cek lokasi sampah yang tersisa
+print(f"Remaining trash positions: {robot.trash_positions}")
